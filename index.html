@@ -1,294 +1,158 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Will You Be My Valentine?</title>
-    <style>
-        /* Google Fonts for that cute aesthetic */
-        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&family=Pacifico&display=swap');
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Do You Like Me?</title>
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&family=Pacifico&display=swap');
 
-        body {
-            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            font-family: 'Nunito', sans-serif;
-            overflow: hidden; /* Prevent scrolling when buttons get huge */
-            text-align: center;
-            position: relative;
-        }
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-        /* Floating Hearts Background Animation */
-        .bg-heart {
-            position: absolute;
-            color: rgba(255, 255, 255, 0.4);
-            font-size: 20px;
-            animation: float 6s linear infinite;
-            z-index: 0;
-            pointer-events: none;
-        }
+body {
+    background: linear-gradient(135deg, #ff9a9e, #fecfef);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Nunito', sans-serif;
+    overflow: hidden;
+    text-align: center;
+}
 
-        @keyframes float {
-            0% { transform: translateY(100vh) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
-        }
+/* Floating hearts */
+.bg-heart {
+    position: absolute;
+    color: rgba(255,255,255,0.5);
+    animation: float 6s linear infinite;
+}
 
-        .container {
-            z-index: 10;
-            background: rgba(255, 255, 255, 0.85);
-            padding: 2rem;
-            border-radius: 20px;
-            box-shadow: 0 10px 25px rgba(255, 105, 135, 0.3);
-            max-width: 90%;
-            width: 400px;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(5px);
-        }
+@keyframes float {
+    0% { transform: translateY(100vh); }
+    100% { transform: translateY(-10vh); opacity: 0; }
+}
 
-        .gif-container {
-            margin-bottom: 20px;
-        }
+.container {
+    background: rgba(255,255,255,0.9);
+    padding: 2rem;
+    border-radius: 20px;
+    width: 350px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
 
-        .gif-container img {
-            width: 100%;
-            max-width: 200px;
-            height: auto;
-            border-radius: 15px;
-        }
+h1 {
+    font-family: 'Pacifico', cursive;
+    color: #ff4757;
+    margin-bottom: 25px;
+}
 
-        h1 {
-            color: #ff4757;
-            font-family: 'Pacifico', cursive;
-            font-size: 2rem;
-            margin-bottom: 30px;
-            line-height: 1.3;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
-        }
+button {
+    padding: 12px 24px;
+    margin: 10px;
+    border: none;
+    border-radius: 50px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
 
-        .btn-group {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            align-items: center;
-            gap: 20px;
-            min-height: 60px; /* Keep space for buttons */
-        }
+#yes-btn {
+    background: #2ed573;
+    color: white;
+}
 
-        button {
-            padding: 12px 24px;
-            font-size: 1.1rem;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            font-weight: 800;
-            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            outline: none;
-            -webkit-tap-highlight-color: transparent;
-        }
+#no-btn {
+    background: #ff6b81;
+    color: white;
+}
 
-        #yes-btn {
-            background-color: #2ed573;
-            color: white;
-        }
+.success {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+}
 
-        #yes-btn:hover {
-            background-color: #26af61;
-            transform: scale(1.05);
-            box-shadow: 0 6px 15px rgba(46, 213, 115, 0.4);
-        }
-
-        #no-btn {
-            background-color: #ff6b81;
-            color: white;
-        }
-
-        #no-btn:hover {
-            background-color: #ff4757;
-        }
-
-        /* Hidden Success Screen */
-        .success-container {
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 20;
-            animation: popIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-        }
-
-        @keyframes popIn {
-            0% { transform: scale(0); opacity: 0; }
-            80% { transform: scale(1.1); opacity: 1; }
-            100% { transform: scale(1); }
-        }
-
-        .success-text {
-            font-size: 2.5rem;
-            color: #ff4757;
-            margin-top: 20px;
-            font-family: 'Pacifico', cursive;
-        }
-
-        /* Confetti Canvas */
-        #confetti-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 100;
-        }
-
-    </style>
+.success h2 {
+    font-family: 'Pacifico';
+    color: #ff4757;
+    margin-top: 20px;
+}
+</style>
 </head>
+
 <body>
 
-    <!-- Background Hearts (Generated by JS) -->
-    <div id="bg-hearts"></div>
+<div id="hearts"></div>
 
-    <!-- Main Question Screen -->
-    <div class="container" id="question-box">
-        <div class="gif-container">
-            <!-- Cute asking bear -->
-            <img src="https://media.tenor.com/gUiu1zyxfzYAAAAi/bear-kiss-bear-kisses.gif" alt="Cute Bear Asking">
-        </div>
-        <h1 id="question-text">Will you be my Valentine?</h1>
-        <div class="btn-group">
-            <button id="yes-btn" onclick="acceptLove()">Yes</button>
-            <button id="no-btn" onclick="rejectLove()">No</button>
-        </div>
-    </div>
+<div class="container" id="main-box">
+    <h1 id="question">Do you like me Nancy?</h1>
+    <button id="yes-btn" onclick="yesClick()">Yes 😍</button>
+    <button id="no-btn" onclick="noClick()">No 🙄</button>
+</div>
 
-    <!-- Success Screen -->
-    <div class="container success-container" id="success-box">
-        <div class="gif-container">
-            <!-- Happy dancing bear -->
-            <img src="https://media.tenor.com/5mY0_OhkfVoAAAAi/peach-goma-phone.gif" alt="Happy Bear">
-        </div>
-        <div class="success-text">YAYYY! I knew it! ❤️</div>
-        <p style="margin-top: 10px; color: #555; font-weight: bold;">Love you puchu</p>
-    </div>
+<div class="container success" id="success-box">
+    <h2>I knew it! ❤️</h2>
+    <p style="margin-top:10px;">You are in love with me Nancy 😘</p>
+</div>
 
-    <canvas id="confetti-canvas"></canvas>
+<script>
+let count = 0;
 
-    <script>
-        let clickCount = 0;
-        const messages = [
-            "No",
-            "Are you sure cutie?",
-            "Really sure??",
-            "I know you deserve me!",
-            "Think about it...",
-            "Don't break my heart 💔",
-            "I'm gonna cry...",
-            "Pookie please?",
-            "You can't say no to this face!",
-            "Just say YES already!"
-        ];
+const messages = [
+    "No",
+    "Are you sure Nancy?",
+    "Think again 😏",
+    "I know you like me...",
+    "Stop lying 😌",
+    "Come on Nancy 💕",
+    "Just accept it already!",
+    "You can't escape 😆",
+    "Say YES now!",
+    "Last chance 😤"
+];
 
-        // Background Hearts Generator
-        function createHearts() {
-            const container = document.getElementById('bg-hearts');
-            const heartCount = 15;
-            
-            for(let i=0; i<heartCount; i++){
-                const heart = document.createElement('div');
-                heart.innerHTML = '❤️';
-                heart.classList.add('bg-heart');
-                heart.style.left = Math.random() * 100 + 'vw';
-                heart.style.animationDuration = (Math.random() * 3 + 4) + 's';
-                heart.style.fontSize = (Math.random() * 20 + 10) + 'px';
-                container.appendChild(heart);
-            }
-        }
-        createHearts();
+function noClick() {
+    count++;
 
-        function rejectLove() {
-            clickCount++;
-            
-            // 1. Change Text
-            const questionText = document.getElementById('question-text');
-            // Loop through messages, stick to last one if exceeded
-            const messageIndex = Math.min(clickCount, messages.length - 1);
-            questionText.innerText = messages[messageIndex];
+    document.getElementById("question").innerText =
+        messages[Math.min(count, messages.length - 1)];
 
-            // 2. Make Yes Button Bigger
-            const yesBtn = document.getElementById('yes-btn');
-            // Start at 1rem, grow by 0.5rem each click
-            const currentSize = 1.1 + (clickCount * 1.2); 
-            yesBtn.style.fontSize = `${currentSize}rem`;
-            yesBtn.style.padding = `${12 + (clickCount * 5)}px ${24 + (clickCount * 10)}px`;
+    // grow yes button
+    let yes = document.getElementById("yes-btn");
+    yes.style.transform = `scale(${1 + count * 0.3})`;
 
-            // 3. Make No Button Smaller
-            const noBtn = document.getElementById('no-btn');
-            const currentNoSize = Math.max(0.5, 1.1 - (clickCount * 0.2)); // Don't go below 0.5rem
-            noBtn.style.fontSize = `${currentNoSize}rem`;
-            
-            // If No button gets too small, hide it effectively
-            if (clickCount > 6) {
-                noBtn.style.display = 'none';
-            }
-        }
+    // shrink no button
+    let no = document.getElementById("no-btn");
+    no.style.transform = `scale(${1 - count * 0.1})`;
 
-        function acceptLove() {
-            document.getElementById('question-box').style.display = 'none';
-            document.getElementById('success-box').style.display = 'flex';
-            startConfetti();
-        }
+    if (count > 6) no.style.display = "none";
+}
 
-        // Simple Confetti Logic
-        const canvas = document.getElementById("confetti-canvas");
-        const ctx = canvas.getContext("2d");
-        let confetti = [];
+function yesClick() {
+    document.getElementById("main-box").style.display = "none";
+    document.getElementById("success-box").style.display = "flex";
+}
 
-        function startConfetti() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            
-            const colors = ['#ff4757', '#2ed573', '#1e90ff', '#ffa502', '#ff6b81'];
-            
-            for (let i = 0; i < 200; i++) {
-                confetti.push({
-                    x: Math.random() * canvas.width,
-                    y: Math.random() * canvas.height - canvas.height,
-                    w: Math.random() * 10 + 5,
-                    h: Math.random() * 10 + 5,
-                    color: colors[Math.floor(Math.random() * colors.length)],
-                    vy: Math.random() * 5 + 2,
-                    vx: Math.random() * 4 - 2
-                });
-            }
-            animateConfetti();
-        }
+/* floating hearts */
+function createHearts() {
+    const container = document.getElementById("hearts");
+    for (let i = 0; i < 15; i++) {
+        let heart = document.createElement("div");
+        heart.innerHTML = "❤️";
+        heart.classList.add("bg-heart");
+        heart.style.left = Math.random() * 100 + "vw";
+        heart.style.fontSize = (Math.random() * 20 + 10) + "px";
+        heart.style.animationDuration = (Math.random() * 3 + 4) + "s";
+        container.appendChild(heart);
+    }
+}
+createHearts();
+</script>
 
-        function animateConfetti() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            confetti.forEach((c, index) => {
-                c.y += c.vy;
-                c.x += c.vx;
-                ctx.fillStyle = c.color;
-                ctx.fillRect(c.x, c.y, c.w, c.h);
-
-                if (c.y > canvas.height) c.y = -10;
-            });
-            requestAnimationFrame(animateConfetti);
-        }
-
-        window.addEventListener('resize', () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        });
-    </script>
 </body>
 </html>
